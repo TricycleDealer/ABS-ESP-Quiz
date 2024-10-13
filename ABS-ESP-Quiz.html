@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABS, ESP und Achsgeometrie Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #83a4d4, #b6fbff);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #quiz-container {
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+      position: relative;
+    }
+    h1 {
+      color: #444;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      font-size: 1.4em;
+      color: #555;
+    }
+    label {
+      display: block;
+      background-color: #f0f0f0;
+      padding: 10px 15px;
+      border-radius: 5px;
+      margin: 8px 0;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    label:hover {
+      background-color: #e0e0e0;
+    }
+    .feedback {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 15px;
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+    .correct { color: #28a745; }
+    .incorrect { color: #dc3545; }
+    button {
+      padding: 12px 24px;
+      font-size: 1em;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #next-button {
+      display: none;
+    }
+    .explanation {
+      margin-top: 15px;
+      font-size: 1em;
+      color: #555;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.5s ease-in;
+      display: none;
+    }
+    input[type="radio"] {
+      margin-right: 10px;
+    }
+    .progress-bar {
+      background-color: #007bff;
+      height: 8px;
+      border-radius: 5px;
+      margin: 15px 0;
+      transition: width 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="quiz-container">
+    <h1>ABS, ESP und Achsgeometrie Quiz</h1>
+    <div class="progress-bar" id="progress-bar"></div>
+    <div id="quiz-content">
+      <!-- Frage und Antwort-Optionen werden hier angezeigt -->
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Was bedeutet ABS?",
+        options: ["Anti-Bremssystem", "Antiblockiersystem", "Automatisches Bremssystem", "Aktives Bremssystem"],
+        answer: 1,
+        explanation: "ABS steht für 'Antiblockiersystem'. Es verhindert, dass die Räder beim Bremsen blockieren, was die Lenkfähigkeit erhält."
+      },
+      {
+        question: "Welcher Sensor ist für das ABS wichtig?",
+        options: ["Temperatursensor", "Raddrehzahlsensor", "Öldrucksensor", "Lenkwinkelsensor"],
+        answer: 1,
+        explanation: "Der Raddrehzahlsensor misst die Drehzahl jedes Rads und ermöglicht es dem ABS, blockierende Räder zu erkennen und den Bremsdruck anzupassen."
+      },
+      {
+        question: "Wofür steht ESP?",
+        options: ["Elektronische Stabilitätskontrolle", "Elektronisches Stabilitätsprogramm", "Erweitertes Sicherheitsprotokoll", "Elektronische Sicherheitsprozedur"],
+        answer: 1,
+        explanation: "ESP steht für 'Elektronisches Stabilitätsprogramm'. Es hilft, das Fahrzeug stabil zu halten, insbesondere bei Schleudergefahr."
+      },
+      {
+        question: "Welcher Sensor wird nicht für ESP verwendet?",
+        options: ["Querbeschleunigungssensor", "Gierratensensor", "Lenkwinkelsensor", "Luftmassensensor"],
+        answer: 3,
+        explanation: "Der Luftmassensensor wird in der Motorsteuerung verwendet, jedoch nicht für ESP. Für ESP sind insbesondere Gierratensensor, Querbeschleunigungssensor und Lenkwinkelsensor relevant."
+      },
+      {
+        question: "Wann greift das ABS-System ein?",
+        options: ["Beim schnellen Beschleunigen", "Beim Lenken", "Beim starken Bremsen", "Beim Anhalten"],
+        answer: 2,
+        explanation: "Das ABS-System greift ein, wenn ein Blockieren der Räder droht, also bei starkem Bremsen. So bleibt die Lenkfähigkeit erhalten."
+      },
+      {
+        question: "Was bedeutet positiver Sturz?",
+        options: ["Die Reifenoberkanten sind nach außen geneigt", "Die Reifenoberkanten sind nach innen geneigt", "Die Reifen sind parallel zur Straße", "Der Sturz ist nicht einstellbar"],
+        answer: 0,
+        explanation: "Positiver Sturz bedeutet, dass die Reifenoberkanten nach außen geneigt sind, was die Stabilität in Kurven beeinflussen kann."
+      },
+      {
+        question: "Welcher Sturz sorgt für bessere Kurvenstabilität?",
+        options: ["Positiver Sturz", "Negativer Sturz", "Neutraler Sturz", "Kein Sturz"],
+        answer: 1,
+        explanation: "Negativer Sturz verbessert die Kurvenstabilität, da die Reifen beim Einlenken besseren Kontakt zur Straße haben."
+      },
+      {
+        question: "Was bezeichnet die Spur eines Fahrzeugs?",
+        options: ["Den Abstand zwischen den Vorderrädern", "Die Neigung der Reifen", "Den Winkel der Achsen zur Längsachse", "Den Abstand zwischen Vorder- und Hinterrädern"],
+        answer: 0,
+        explanation: "Die Spur bezeichnet den Abstand zwischen den Vorderrädern und beeinflusst das Fahrverhalten, insbesondere die Stabilität."
+      },
+      {
+        question: "Welcher Nachlaufwinkel verbessert die Geradeausstabilität?",
+        options: ["Positiver Nachlauf", "Negativer Nachlauf", "Neutraler Nachlauf", "Kein Nachlauf"],
+        answer: 0,
+        explanation: "Ein positiver Nachlauf verbessert die Geradeausstabilität und sorgt für ein sicheres Lenkverhalten."
+      },
+      {
+        question: "Was beschreibt der Nachlauf?",
+        options: ["Die Höhe des Fahrwerks", "Den Winkel zwischen der Lenkachse und der Straße", "Die Distanz zwischen Vorder- und Hinterrädern", "Die Neigung der Reifen"],
+        answer: 1,
+        explanation: "Der Nachlauf beschreibt den Winkel zwischen der Lenkachse und der Straße, was die Stabilität und Rückstellkräfte beeinflusst."
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    function showQuestion(index) {
+      const quizContent = document.getElementById('quiz-content');
+      const question = questions[index];
+      const progressBar = document.getElementById('progress-bar');
+
+      quizContent.innerHTML = `
+        <div class="question">
+          <h3>${index + 1}. ${question.question}</h3>
+          ${question.options.map((option, i) => `
+            <label>
+              <input type="radio" name="option" value="${i}">
+              ${option}
+            </label>
+          `).join('')}
+        </div>
+        <button onclick="submitAnswer()">Antwort bestätigen</button>
+        <div id="feedback" class="feedback"></div>
+        <div id="explanation" class="explanation"></div>
+        <button id="next-button" onclick="nextQuestion()">Weiter zur nächsten Frage</button>
+      `;
+
+      progressBar.style.width = ((index + 1) / questions.length) * 100 + '%';
+    }
+
+    function submitAnswer() {
+      const selectedOption = document.querySelector('input[name="option"]:checked');
+      const feedbackDiv = document.getElementById('feedback');
+      const explanationDiv = document.getElementById('explanation');
+      const nextButton = document.getElementById('next-button');
+
+      if (!selectedOption) {
+        alert("Bitte eine Antwort auswählen!");
+        return;
+      }
+
+      const isCorrect = parseInt(selectedOption.value) === questions[currentQuestionIndex].answer;
+      feedbackDiv.textContent = isCorrect ? "Richtig!" : "Falsch!";
+      feedbackDiv.className = isCorrect ? "feedback correct" : "feedback incorrect";
+      feedbackDiv.style.display = "block";
+
+      explanationDiv.textContent = questions[currentQuestionIndex].explanation;
+      explanationDiv.style.display = "block";
+      
+      nextButton.style.display = "inline-block";
+    }
+
+    function nextQuestion() {
+      currentQuestionIndex++;
+      if (currentQuestionIndex < questions.length) {
+        showQuestion(currentQuestionIndex);
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      document.getElementById('quiz-container').innerHTML = `
+        <h2>Quiz abgeschlossen!</h2>
+        <p>Du hast alle Fragen beantwortet. Super gemacht!</p>
+      `;
+    }
+
+    showQuestion(currentQuestionIndex);
+  </script>
+
+</body>
+</html>
